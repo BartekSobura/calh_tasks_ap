@@ -5,5 +5,17 @@ Nie zmieniaj docstringów metod specjalnych (takich jak __init__, czy __repr__).
 """
 
 
+import inspect
+
+
 def deco_doc(new_docstring):
-    pass
+    def deco(cls):
+        for func in filter(inspect.isfunction, vars(cls).values()):
+            if func.__name__.startswith('__'):
+                continue
+            else:
+                func.__doc__ = new_docstring
+        return cls
+    return deco
+
+
